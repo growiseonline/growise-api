@@ -1,0 +1,45 @@
+version: '3.1'
+
+services:
+  # redis:
+  #   image: redis:alpine
+  #   container_name: redis
+  #   restart: always
+  #   expose:
+  #     - 6379
+  #   networks:
+  #     - app-network
+  postgres:
+    image: postgres:14.3
+    container_name: postgre
+    restart: always
+    tty: true
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=publisher
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_USER=root
+    networks:
+      - app-network
+    volumes:
+      - ./.docker/dbdata:/var/lib/mysql
+  mongo:
+    image: mongo:5.0.12
+    container_name: db
+    restart: always
+    tty: true
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_DATABASE=tennant_manager
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=root
+    networks:
+      - app-network
+    volumes:
+      - ./.docker/dbdata:/var/lib/mysql
+
+networks:
+  app-network:
+    driver: bridge
