@@ -1,2 +1,2 @@
 
-export * from './work-hiring'
+export * from './tennant.validation'

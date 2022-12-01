@@ -1,2 +1,2 @@
 
-export * from './work-hiring.repository'
+export * from './tennant.repository'

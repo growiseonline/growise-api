@@ -60,8 +60,10 @@ export class ApiHttpServer implements IHttpServer {
             'PATCH': this.app.patch.bind(this.app),
             'DELETE': this.app.delete.bind(this.app),
         }
+        console.log(method, path);
 
         methodDict[method](path, async (expRequest, expResponse) => {
+
             try {
                 const beforeFunctions = Array.isArray(before) ? before : [before]
                 const afterFunctions = Array.isArray(after) ? after : [after]

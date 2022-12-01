@@ -7,7 +7,7 @@ export const TennantSchema = new Schema<Tennant>({
     updatedAt: { type: 'date', required: true },
 
     name: { type: 'string', required: true },
-    slug: { type: 'string', required: true },
+    slug: { type: 'string', required: true, unique: true, index: 'text' },
     sqlConnection: { type: 'object' },
 
 })

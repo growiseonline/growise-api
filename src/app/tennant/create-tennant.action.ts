@@ -20,7 +20,6 @@ export class CreateTennantAction implements IAction<ICreateTennantProps, ITennan
     constructor(@inject(TYPES.TennantRepository) private readonly tennantRepository: ITennantRepository) { }
 
     async execute(props: ICreateTennantProps): Promise<ITennantEntity> {
-        console.log('IASKIKSADik');
 
         try {
             const userPasswordSize = 15

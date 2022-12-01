@@ -6,4 +6,5 @@ export const TENNANT_PASSWORD = process.env.TENNANT_PASSWORD!
 export const TENNANT_USER = process.env.TENNANT_USER!
 export const TENNANT_PORT = Number(process.env.TENNANT_PORT!)
 export const MONGO_URI = process.env.MONGO_URI!
+export const PORT = process.env.PORT!
 

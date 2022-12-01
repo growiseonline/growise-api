@@ -11,7 +11,7 @@ const route: IHttpRoute = {
     },
     routeProps: {
         path: '/tennant',
-        handler: async ({ body }, aplication) => {
+        handler: async ({ body, }, aplication) => {
             const createTennantpresentation = aplication.context.get<IPresentation<ICreateTennantProps, void>>(TYPES.CreateTennantPresentation)
 
             await createTennantpresentation.execute(body)
