@@ -1,2 +1,2 @@
-export * from './ITennantEntity'
-export * from './ITennantRepository'
+export * from './ITennant'
+export * from './ITennantMasterclient' 

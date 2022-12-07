@@ -19,7 +19,7 @@ export class ValidationError extends HttpError {
 }
 
 export class ResourceNotFound extends HttpError {
-    constructor(message = 'The source was not found!') {
-        super(404, 'WorkHiringNotFound', message, { data: undefined, stack: undefined })
+    constructor(name = 'ResourceNotFound', message = 'The source was not found!') {
+        super(404, name, message, { data: undefined, stack: undefined })
     }
 }

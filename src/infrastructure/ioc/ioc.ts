@@ -2,13 +2,15 @@ import { Container } from "inversify";
 import 'reflect-metadata';
 import { EventEmitter } from "stream";
 import { DataSource } from 'typeorm';
-import { CreateTennantAction, GetTennantAction } from "../../app/tennant";
-import { CreateTennantPresentation } from "../../presentation/tennant/create-tennant.presentation";
-import { GetTennantPresentation } from "../../presentation/tennant/get-tennant.presentation";
+import { GetTennantDataAction, IGetTennantDataProps, IGetTennantDataResponse } from "../../app/tennant";
+import { GetTennantDataPresentation } from "../../presentation/tennant/get-tennant-data.presentation";
+import { IAction, IPresentation } from "../crosscutting/interfaces";
 import { EventManager } from "../event-manager";
+import { HttpAxios } from "../http/axios/http-axios";
+import { IHttpClient } from "../http/client/interfaces/IHttpClient";
+import { TennantMasterClient } from "../http/client/tennant-master-client";
 import { ApiHttpServer } from '../http/server/api-http-server';
 import { IHttpServer } from '../http/server/interfaces';
-import { TennantRepository } from "../repository/tennant.repository";
 import { TYPES } from './types';
 
 
@@ -22,24 +24,23 @@ export async function handleIoc(sqlConnection: any, noSqlConnection: any) {
     container.bind(TYPES.AplicationContext).toConstantValue(container)
 
     container.bind<DataSource>(TYPES.SQLConnection).toConstantValue(sqlConnection)
-    container.bind<DataSource>(TYPES.NoSQLConnection).toConstantValue(noSqlConnection)
 
     container.bind<IHttpServer>(TYPES.WebApiService).to(ApiHttpServer)
+    container.bind<IHttpClient>(TYPES.HttpClient).to(HttpAxios)
 
-    // repository  
-    container.bind(TYPES.TennantRepository).to(TennantRepository)
+    // repository   
+
+    // action  
+    container.bind<IAction<IGetTennantDataProps, IGetTennantDataResponse>>(TYPES.GetTennantDataAction).to(GetTennantDataAction)
 
 
-    // action 
-    container.bind(TYPES.CreateTennantAction).to(CreateTennantAction)
-    container.bind(TYPES.GetTennantAction).to(GetTennantAction)
+    // presentation  
+    container.bind<IPresentation<IGetTennantDataProps, IGetTennantDataResponse>>(TYPES.GetTennantDataPresentation).to(GetTennantDataPresentation)
 
-    // presentation 
-    container.bind(TYPES.CreateTennantPresentation).to(CreateTennantPresentation)
-    container.bind(TYPES.GetTennantPresentation).to(GetTennantPresentation)
+    // events 
 
-    // events
-    // container.bind(TYPES.WorkHiringEvents).toConstantValue(new WorkHiringEventObserver(eventManager))
+    // clients
+    container.bind(TYPES.TennantMasterClient).to(TennantMasterClient)
 
     return container
 }

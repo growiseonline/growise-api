@@ -1,7 +1,4 @@
-import createTennant from "./create-tennant";
-import getTennant from "./get-tennant.route";
-
+import tennantData from './get-tennant-data-summary'
 export default [
-    createTennant,
-    getTennant
+    tennantData
 ]
