@@ -3,6 +3,7 @@ import 'reflect-metadata';
 import { EventEmitter } from "stream";
 import { DataSource } from 'typeorm';
 import { GetTennantDataAction, IGetTennantDataProps, IGetTennantDataResponse } from "../../app/tennant";
+import { ISyncronizeDatabaseResponse, ISyncronizeTennantProps, SyncronizeTennant } from "../../app/tennant/syncronize-tennat-database";
 import { GetTennantDataPresentation } from "../../presentation/tennant/get-tennant-data.presentation";
 import { IAction, IPresentation } from "../crosscutting/interfaces";
 import { EventManager } from "../event-manager";
@@ -32,7 +33,7 @@ export async function handleIoc(sqlConnection: any, noSqlConnection: any) {
 
     // action  
     container.bind<IAction<IGetTennantDataProps, IGetTennantDataResponse>>(TYPES.GetTennantDataAction).to(GetTennantDataAction)
-
+    container.bind<IAction<ISyncronizeTennantProps,ISyncronizeDatabaseResponse>>(TYPES.SyncronizeTennant).to(SyncronizeTennant)
 
     // presentation  
     container.bind<IPresentation<IGetTennantDataProps, IGetTennantDataResponse>>(TYPES.GetTennantDataPresentation).to(GetTennantDataPresentation)

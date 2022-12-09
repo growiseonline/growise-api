@@ -18,6 +18,7 @@ export const TYPES = {
 
     // action  
     GetTennantDataAction: Symbol.for('GetTennantData'),
+    SyncronizeTennant : Symbol.for('SyncronizeTennant'),
 
     // presentation  ,
     GetTennantDataPresentation: Symbol.for('GetTennantDataPresentation'),
