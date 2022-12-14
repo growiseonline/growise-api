@@ -6,7 +6,7 @@ const route: IHttpRoute = {
     routeProps: {
         path: '/info/routes',
         async handler(request, aplication: AplicationOptions) {
-            const httpServer: IHttpServer = aplication.context.get(TYPES.WebApiService)
+            const httpServer: IHttpServer = await aplication.context.get(TYPES.WebApiService)
 
             const routes = httpServer.getRoutes().map(route => {
 

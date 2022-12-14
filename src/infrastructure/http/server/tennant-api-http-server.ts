@@ -1,6 +1,6 @@
 import * as App from 'express';
 import { Server } from "http";
-import { inject, injectable } from 'inversify';
+import { Container, inject, injectable } from 'inversify';
 import { TennantContainerManager } from '../../container-manager/TennantContainerManager';
 import { InternalServerError, ValidationError } from '../../crosscutting/errors/default-http-errors';
 import { IHttpError } from '../../crosscutting/interfaces/IHttpError';
@@ -8,16 +8,16 @@ import { TYPES } from '../../ioc/types';
 import { AllowedHttpMethods, AplicationContext, IHttpRequest, IHttpRoute, IHttpRouteProps, IHttpRouteValidation, IHttpServer, IServerProps } from "./interfaces";
 
 @injectable()
-export class ApiHttpServer implements IHttpServer {
+export class TennantApiHttpServer implements IHttpServer {
     private app!: App.Express
     private server!: Server
     private startTime: Date = new Date()
 
     private storedRoutes: IHttpRoute[] = []
 
-    private tennantDataManager: TennantContainerManager = new TennantContainerManager(this)
+    private tennantContextManager: TennantContainerManager = new TennantContainerManager(this)
 
-    constructor(@inject(TYPES.AplicationContext) private readonly context: AplicationContext) {
+    constructor() {
         this.app = App.default()
         this.app.use(App.default.json())
     }
@@ -50,7 +50,6 @@ export class ApiHttpServer implements IHttpServer {
 
     }
 
-
     async addRoute(
         method: AllowedHttpMethods,
         { handler, path, after, before, }: IHttpRouteProps,
@@ -65,6 +64,7 @@ export class ApiHttpServer implements IHttpServer {
         }
         console.log(method, path);
 
+
         methodDict[method](path, async (expRequest, expResponse) => {
 
             try {
@@ -77,6 +77,16 @@ export class ApiHttpServer implements IHttpServer {
                     context: {},
                     headers: { ...expRequest.headers } as any,
                     query: expRequest.query || {}
+                }
+
+
+                const context: AplicationContext = {
+                    // @ts-ignore-error
+                    get: async (type: string) => {
+                        const tennantData = await this.tennantContextManager.getTennantData(request.headers.tennant as string)
+
+                        return tennantData.container.get(type)
+                    }
                 }
 
                 if (validation) {
@@ -110,12 +120,12 @@ export class ApiHttpServer implements IHttpServer {
                 if (beforeFunctions) {
                     for (const onBefore of beforeFunctions) {
                         if (onBefore) {
-                            request = await onBefore(request, { context: this.context })
+                            request = await onBefore(request, { context })
                         }
                     }
                 }
 
-                let handlerResult = await handler(request, { context: this.context })
+                let handlerResult = await handler(request, { context })
 
                 if (afterFunctions) {
                     for (const onAfter of afterFunctions) {
