@@ -8,50 +8,45 @@ import { TYPES } from "../../infrastructure/ioc/types";
 import { IGetTennnatResponse } from "./interfaces";
 
 export interface ISyncronizeTennantProps {
-  slug: string;
+    slug: string;
 }
 
-export interface ISyncronizeDatabaseResponse{
-    connectionmanager : ConnectionManager
+export interface ISyncronizeDatabaseResponse {
+    connectionmanager: ConnectionManager
 }
 @injectable()
-export class SyncronizeTennant implements IAction<ISyncronizeTennantProps,ISyncronizeDatabaseResponse> {
+export class SyncronizeTennant implements IAction<ISyncronizeTennantProps, ISyncronizeDatabaseResponse> {
 
-
-
-    constructor(@inject(TYPES.TennantMasterClient) private readonly tennantMasterClient:TennantMasterClient){
+    constructor(@inject(TYPES.TennantMasterClient) private readonly tennantMasterClient: TennantMasterClient) {
 
     }
     async execute(props: ISyncronizeTennantProps): Promise<ISyncronizeDatabaseResponse> {
-        
-        const tennatResult =   await this.gettennat(props.slug);
+        const tennatResult = await this.gettennat(props.slug);
 
-       const syncronize = await this.syncronize(tennatResult);
+        const syncronize = await this.syncronize(tennatResult);
 
-       return {connectionmanager : syncronize};      
-
-
+        return { connectionmanager: syncronize };
     }
 
-    async gettennat( slug : string) {
-        const tennat = await this.tennantMasterClient.getTennant({slug});
+    async gettennat(slug: string) {
+        const tennat = await this.tennantMasterClient.getTennant({ slug });
         return tennat;
     }
 
-    async syncronize({sqlConnection, slug} : IGetTennnatResponse){
+    async syncronize({ sqlConnection, slug }: IGetTennnatResponse) {
 
-       const connection = new ConnectionManager({
-        host: sqlConnection.host,
-        slug,
-        database : sqlConnection.datbase,
-        password : sqlConnection.password,
-        port : sqlConnection.port,
-        userName : sqlConnection.username
-       })
-       await connection.conect();
-       await connection.setup();
+        const connection = new ConnectionManager({
+            host: sqlConnection.host,
+            slug,
+            database: sqlConnection.datbase,
+            password: sqlConnection.password,
+            port: sqlConnection.port,
+            userName: sqlConnection.username
+        })
+        await connection.conect();
+        await connection.setup();
 
-       return connection;
+        return connection;
 
     }
 

@@ -23,6 +23,7 @@
     "joi-to-json-schema": "^5.1.0",
     "json-joi-converter": "^17.2.1-g",
     "mongoose": "^6.6.1",
+    "mysql": "^2.18.1",
     "nodemon": "^2.0.19",
     "pg": "^8.8.0",
     "reflect-metadata": "^0.1.13",

@@ -8,7 +8,7 @@ export class GetTennantDataPresentation implements IPresentation<IGetTennantData
     constructor(@inject(TYPES.GetTennantDataAction) private readonly getTennantAction: IAction<IGetTennantDataProps, IGetTennantDataResponse>) { }
 
     async execute({ slug }: IGetTennantDataProps): Promise<IGetTennantDataResponse> {
-        return this.getTennantAction.execute({ slug })
+        return await this.getTennantAction.execute({ slug })
     }
 
 }

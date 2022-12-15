@@ -10,14 +10,19 @@ const route: IHttpRoute = {
         path: '/info/tennant',
         async handler(request, aplication: AplicationOptions) {
 
-            const getTennantdataPresentation = aplication.context.get<IPresentation<IGetTennantDataProps, IGetTennantDataResponse>>(TYPES.GetTennantDataPresentation)
-            const syncronizedb = await aplication.context.get<SyncronizeTennant>(TYPES.SyncronizeTennant).execute({slug :request.headers.tennant  as string});
-           
-            return {... await getTennantdataPresentation.execute({ slug: request.headers.tennant as string }), isconected : syncronizedb.connectionmanager.isconected}
+
+            const syncronyzer = await aplication.context.get<SyncronizeTennant>(TYPES.SyncronizeTennant)
+            const getTennantdataPresentation = await aplication.context.get<IPresentation<IGetTennantDataProps, IGetTennantDataResponse>>(TYPES.GetTennantDataPresentation)
+
+            const syncronizedb = await syncronyzer.execute({ slug: request.headers.tennant as string });
+
+            const tennandData = await getTennantdataPresentation.execute({ slug: request.headers.tennant as string })
+
+            return { ...tennandData, isconected: syncronizedb.connectionmanager.isconected }
         },
 
     }
-    
+
 }
 
 export default route
