@@ -15,7 +15,7 @@ import { IHttpServer } from '../http/server/interfaces';
 import { TYPES } from './types';
 
 
-export async function handleIoc(sqlConnection: any, noSqlConnection: any) {
+export async function handleIoc(sqlConnection: any, noSqlConnection: any, apiHttpServer: any) {
     const eventManager = new EventManager(new EventEmitter())
     const container = new Container({ autoBindInjectable: true, defaultScope: 'Singleton' });
 
@@ -26,7 +26,7 @@ export async function handleIoc(sqlConnection: any, noSqlConnection: any) {
 
     container.bind<DataSource>(TYPES.SQLConnection).toConstantValue(sqlConnection)
 
-    container.bind<IHttpServer>(TYPES.WebApiService).to(ApiHttpServer)
+    container.bind<IHttpServer>(TYPES.WebApiService).toConstantValue(apiHttpServer)
     container.bind<IHttpClient>(TYPES.HttpClient).to(HttpAxios)
 
     // repository   
