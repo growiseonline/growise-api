@@ -23,6 +23,7 @@ export class SyncronizeTennant implements IAction<ISyncronizeTennantProps, ISync
     async execute(props: ISyncronizeTennantProps): Promise<ISyncronizeDatabaseResponse> {
         const tennatResult = await this.gettennat(props.slug);
 
+
         const syncronize = await this.syncronize(tennatResult);
 
         return { connectionmanager: syncronize };
@@ -43,6 +44,7 @@ export class SyncronizeTennant implements IAction<ISyncronizeTennantProps, ISync
             port: sqlConnection.port,
             userName: sqlConnection.username
         })
+        await connection.createDatabaseIfNotExists()
         await connection.conect();
         await connection.setup();
 

@@ -33,7 +33,7 @@ export async function handleIoc(sqlConnection: any, noSqlConnection: any, apiHtt
 
     // action  
     container.bind<IAction<IGetTennantDataProps, IGetTennantDataResponse>>(TYPES.GetTennantDataAction).to(GetTennantDataAction)
-    container.bind<IAction<ISyncronizeTennantProps,ISyncronizeDatabaseResponse>>(TYPES.SyncronizeTennant).to(SyncronizeTennant)
+    container.bind<IAction<ISyncronizeTennantProps, ISyncronizeDatabaseResponse>>(TYPES.SyncronizeTennant).to(SyncronizeTennant)
 
     // presentation  
     container.bind<IPresentation<IGetTennantDataProps, IGetTennantDataResponse>>(TYPES.GetTennantDataPresentation).to(GetTennantDataPresentation)

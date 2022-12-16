@@ -5,20 +5,16 @@ import { AplicationOptions, IHttpRoute, IHttpServer } from '../../infrastructure
 import { TYPES } from '../../infrastructure/ioc/types'
 
 const route: IHttpRoute = {
-    method: 'GET',
+    method: 'POST',
     routeProps: {
-        path: '/tennant/info',
+        path: '/tennant/setup',
         async handler(request, aplication: AplicationOptions) {
 
 
             const syncronyzer = await aplication.context.get<SyncronizeTennant>(TYPES.SyncronizeTennant)
-            const getTennantdataPresentation = await aplication.context.get<IPresentation<IGetTennantDataProps, IGetTennantDataResponse>>(TYPES.GetTennantDataPresentation)
 
             const syncronizedb = await syncronyzer.execute({ slug: request.headers.tennant as string });
 
-            const tennandData = await getTennantdataPresentation.execute({ slug: request.headers.tennant as string })
-
-            return { ...tennandData, isconected: syncronizedb.connectionmanager.isconected }
         },
 
     }

@@ -1,3 +1,4 @@
+import 'reflect-metadata'
 import * as App from 'express';
 import { Server } from "http";
 import { inject, injectable } from 'inversify';
@@ -6,7 +7,6 @@ import { InternalServerError, ValidationError } from '../../crosscutting/errors/
 import { IHttpError } from '../../crosscutting/interfaces/IHttpError';
 import { TYPES } from '../../ioc/types';
 import { AllowedHttpMethods, AplicationContext, IHttpRequest, IHttpRoute, IHttpRouteProps, IHttpRouteValidation, IHttpServer, IServerProps } from "./interfaces";
-
 @injectable()
 export class ApiHttpServer implements IHttpServer {
     private app!: App.Express
@@ -15,7 +15,6 @@ export class ApiHttpServer implements IHttpServer {
 
     private storedRoutes: IHttpRoute[] = []
 
-    private tennantDataManager: TennantContainerManager = new TennantContainerManager(this)
 
     constructor(@inject(TYPES.AplicationContext) private readonly context: AplicationContext) {
         this.app = App.default()

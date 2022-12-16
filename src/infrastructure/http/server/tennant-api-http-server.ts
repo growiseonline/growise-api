@@ -5,6 +5,8 @@ import { TennantContainerManager } from '../../container-manager/TennantContaine
 import { InternalServerError, ValidationError } from '../../crosscutting/errors/default-http-errors';
 import { IHttpError } from '../../crosscutting/interfaces/IHttpError';
 import { TYPES } from '../../ioc/types';
+import { HttpAxios } from '../axios/http-axios';
+import { TennantMasterClient } from '../client/tennant-master-client';
 import { AllowedHttpMethods, AplicationContext, IHttpRequest, IHttpRoute, IHttpRouteProps, IHttpRouteValidation, IHttpServer, IServerProps } from "./interfaces";
 
 @injectable()
@@ -15,7 +17,8 @@ export class TennantApiHttpServer implements IHttpServer {
 
     private storedRoutes: IHttpRoute[] = []
 
-    private tennantContextManager: TennantContainerManager = new TennantContainerManager(this)
+    private tennantManagerClient = new TennantMasterClient(new HttpAxios)
+    private tennantContextManager: TennantContainerManager = new TennantContainerManager(this, this.tennantManagerClient)
 
     constructor() {
         this.app = App.default()
