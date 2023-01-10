@@ -13,15 +13,18 @@ export const TYPES = {
     // WorkHiringEvents: Symbol.for('WorkHiringEvents'),
 
     // repository  
+    UserRepository: Symbol.for('UserRepository'),
 
     // infrastructure 
 
     // action  
     GetTennantDataAction: Symbol.for('GetTennantData'),
-    SyncronizeTennant : Symbol.for('SyncronizeTennant'),
+    SyncronizeTennant: Symbol.for('SyncronizeTennant'),
+    CreateUserAction: Symbol.for('CreateUserAction'),
 
     // presentation  ,
     GetTennantDataPresentation: Symbol.for('GetTennantDataPresentation'),
+    CreateUserPresentation: Symbol.for('CreateUserPresentation'),
 
     // rest
     TennantMasterClient: Symbol.for('TennantMasterClient')

@@ -21,7 +21,9 @@ export class TennantApiHttpServer implements IHttpServer {
     private tennantContextManager: TennantContainerManager = new TennantContainerManager(this, this.tennantManagerClient)
 
     constructor() {
+        //@ts-ignore
         this.app = App.default()
+        //@ts-ignore
         this.app.use(App.default.json())
     }
 
@@ -139,23 +141,26 @@ export class TennantApiHttpServer implements IHttpServer {
                 }
 
                 if (method === 'POST') {
-                    expResponse.status(201)
+                    return expResponse.status(201)
                 }
 
-                expResponse.json(handlerResult)
+                return expResponse.json(handlerResult)
             } catch (err: any) {
                 if ((err as IHttpError).statusCode) {
+                    console.error('aaa', err);
                     expResponse
                         .status(err.statusCode)
                         .json(err)
 
                     return
                 }
-                console.log('err', err);
+
+                const error = new InternalServerError(undefined, err)
+                console.log('bbb', err);
 
                 expResponse
                     .status(500)
-                    .json(new InternalServerError(undefined, err))
+                    .json(error)
 
             }
         })

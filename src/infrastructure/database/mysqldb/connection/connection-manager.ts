@@ -1,5 +1,6 @@
 import { injectable } from "inversify";
-import { DataSource, getManager } from "typeorm";
+import { DataSource } from "typeorm";
+import { UserSchema } from "./schema/user.schema";
 
 const CREATE_DATABASE_QUERY = 'CREATE DATABASE IF NOT EXISTS ::DATABASE_NAME::;'
 interface IConnectioProps {
@@ -24,7 +25,7 @@ export class ConnectionManager {
       password: password,
       database: database,
       logging: false,
-      entities: [],
+      entities: [UserSchema],
       subscribers: [],
       migrations: [],
       name: slug,
@@ -37,15 +38,14 @@ export class ConnectionManager {
   }
 
   async createDatabaseIfNotExists(syncronize = false): Promise<void> {
-    const conn = { ... this.connection.options }
-    delete conn.database
-    const query = CREATE_DATABASE_QUERY.replace('::DATABASE_NAME::', this.connection.options.database as string)
-    const dataSource = new DataSource(conn)
+    // const conn = { ... this.connection.options }
+    // delete conn.database
+    // const query = CREATE_DATABASE_QUERY.replace('::DATABASE_NAME::', this.connection.options.database as string)
+    // const dataSource = new DataSource(conn)
 
-    await dataSource.initialize()
-    await dataSource.query(query)
-    await dataSource.synchronize()
-    await dataSource.destroy()
+    // await dataSource.initialize()
+    // await dataSource.query(query)
+    // await dataSource.destroy()
   }
 
   async conect(): Promise<void> {

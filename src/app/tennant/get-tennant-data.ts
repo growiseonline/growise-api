@@ -30,7 +30,7 @@ export class GetTennantDataAction implements IAction<IGetTennantDataProps, IGetT
                 slug: tennantData.slug,
             }
         } catch (err: any) {
-            if (err.response.data.statusCode === 404) {
+            if (err.statusCode === 404) {
                 throw new ResourceNotFound('TennantNotFound', 'The source you are looking for is not in this castle!')
             }
 

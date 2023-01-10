@@ -15,6 +15,7 @@ const route: IHttpRoute = {
 
             const syncronizedb = await syncronyzer.execute({ slug: request.headers.tennant as string });
 
+            return
         },
 
     }

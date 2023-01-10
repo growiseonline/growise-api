@@ -2,7 +2,7 @@ import { HttpError } from "./http-error";
 
 export class InternalServerError extends HttpError {
     constructor(data?: any, stack?: any) {
-        super(500, 'InternalServerError', 'Some unexpected error ocurrent!', { data, stack })
+        super(500, 'InternalServerError', 'Some unexpected error ocurred!', { data, stack })
     }
 }
 

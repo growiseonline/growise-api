@@ -1,8 +1,7 @@
 import { inject, injectable } from "inversify";
-import { Interface } from "readline";
+import { InternalServerError, ResourceNotFound } from "../../infrastructure/crosscutting/errors";
 import { IAction } from "../../infrastructure/crosscutting/interfaces";
 import { ConnectionManager } from "../../infrastructure/database/mysqldb/connection/connection-manager";
-import { handleSQLDatabaseConnection } from "../../infrastructure/database/postgree/connection";
 import { TennantMasterClient } from "../../infrastructure/http/client/tennant-master-client";
 import { TYPES } from "../../infrastructure/ioc/types";
 import { IGetTennnatResponse } from "./interfaces";
@@ -21,8 +20,17 @@ export class SyncronizeTennant implements IAction<ISyncronizeTennantProps, ISync
 
     }
     async execute(props: ISyncronizeTennantProps): Promise<ISyncronizeDatabaseResponse> {
-        const tennatResult = await this.gettennat(props.slug);
+        let tennatResult: IGetTennnatResponse
 
+        try {
+            tennatResult = await this.gettennat(props.slug);
+        } catch (err: any) {
+            const errorCode = err.response.status
+
+            if (errorCode === 404) throw new ResourceNotFound('TennantNotFound', 'This tennant was not found')
+
+            throw new InternalServerError(err.data, err)
+        }
 
         const syncronize = await this.syncronize(tennatResult);
 
@@ -30,8 +38,7 @@ export class SyncronizeTennant implements IAction<ISyncronizeTennantProps, ISync
     }
 
     async gettennat(slug: string) {
-        const tennat = await this.tennantMasterClient.getTennant({ slug });
-        return tennat;
+        return await this.tennantMasterClient.getTennant({ slug });
     }
 
     async syncronize({ sqlConnection, slug }: IGetTennnatResponse) {
@@ -44,7 +51,7 @@ export class SyncronizeTennant implements IAction<ISyncronizeTennantProps, ISync
             port: sqlConnection.port,
             userName: sqlConnection.username
         })
-        await connection.createDatabaseIfNotExists()
+        // await connection.createDatabaseIfNotExists()
         await connection.conect();
         await connection.setup();
 

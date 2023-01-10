@@ -1,5 +1,6 @@
-import { DataSource } from "typeorm"
+import { DataSource } from "typeorm";
 import { TENNANT_DATABASE, TENNANT_PASSWORD, TENNANT_PORT, TENNANT_SERVER_URL, TENNANT_USER } from "../../../enviroment";
+import { UserSchema } from "../../mysqldb/connection/schema/user.schema";
 // import { POSTGRES_DATABASE, POSTGRES_PASSWORD, POSTGRES_PORT, POSTGRES_SERVER_URL, POSTGRES_USER } from "../../../enviroment"
 // import { sqlSchemasAgretion } from "../schema"
 
@@ -12,7 +13,7 @@ export async function handleSQLDatabaseConnection() {
         password: TENNANT_PASSWORD,
         database: TENNANT_DATABASE,
         logging: false,
-        entities: [],
+        entities: [UserSchema],
         subscribers: [],
         migrations: [],
     })

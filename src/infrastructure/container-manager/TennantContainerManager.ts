@@ -1,9 +1,10 @@
 import { Container } from "inversify";
 import { IGetTennnatResponse } from "../../app/tennant/interfaces";
+import { ResourceNotFound } from "../crosscutting/errors";
 import { addInMinutes } from "../crosscutting/utils";
 import { TennantMasterClient } from "../http/client/tennant-master-client";
 import { IHttpServer } from "../http/server/interfaces";
-import { handleIoc } from "../ioc";
+import { handleTennantIoc } from "../ioc";
 import { ConnectionManager } from './../database/mysqldb/connection/'
 
 const DEFAULT_BUFFER_EXPIRATION_TIME_IN_SECONDS = 60 * 10 // 10 MINUTES
@@ -35,13 +36,21 @@ export class TennantContainerManager {
     }
 
     private async createTennantData(slug: string): Promise<ITennantData> {
-        const tennantData = await this.tennantMasterClient.getTennant({ slug })
+        let tennantData: IGetTennnatResponse | undefined = undefined
+
+        try {
+            tennantData = await this.tennantMasterClient.getTennant({ slug })
+        } catch (err) {
+            console.log(err);
+
+            throw new ResourceNotFound('TennantNotFound', 'Tennat wast not found')
+        }
+
         const connection = await this.handleSqlConnection(tennantData)
 
-        const newContaier = await handleIoc(
+        const newContaier = await handleTennantIoc(
             connection.connection, // inserir conexão com sql aqui
             {},
-            this.httpServer
         )
 
         this.tennantBuffer[slug] = {
@@ -69,6 +78,8 @@ export class TennantContainerManager {
             userName: username,
             slug,
         })
+
+        connection.conect()
 
         return connection
     }
