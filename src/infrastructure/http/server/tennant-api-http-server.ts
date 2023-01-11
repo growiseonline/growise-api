@@ -141,22 +141,31 @@ export class TennantApiHttpServer implements IHttpServer {
                 }
 
                 if (method === 'POST') {
-                    return expResponse.status(201)
+                    expResponse.status(201)
+
                 }
 
                 return expResponse.json(handlerResult)
+
             } catch (err: any) {
+
+                if (!err.data) {
+                    delete err.data
+                }
+
+                if (!err.stack) {
+                    delete err.stack
+                }
+                console.error('Error', err);
                 if ((err as IHttpError).statusCode) {
-                    console.error('aaa', err);
-                    expResponse
+                    return expResponse
                         .status(err.statusCode)
                         .json(err)
 
-                    return
+
                 }
 
                 const error = new InternalServerError(undefined, err)
-                console.log('bbb', err);
 
                 expResponse
                     .status(500)

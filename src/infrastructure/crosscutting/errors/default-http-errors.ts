@@ -7,8 +7,8 @@ export class InternalServerError extends HttpError {
 }
 
 export class BadRequestError extends HttpError {
-    constructor(data?: any, stack?: any) {
-        super(400, 'BadRequestError', 'Somehing is wrong with your request', { data, stack })
+    constructor(ErrorName = 'BadRequestError', message = 'Somehing is wrong with your request') {
+        super(400, ErrorName, message)
     }
 }
 

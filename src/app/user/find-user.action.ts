@@ -6,22 +6,22 @@ import { IAction } from "../../infrastructure/crosscutting/interfaces";
 import { TYPES } from "../../infrastructure/ioc/types";
 
 @injectable()
-export class FindUserAction implements IAction<IFindUserProps, User> {
+export class FindUserAction implements IAction<IFindUserProps, User | null> {
     constructor(@inject(TYPES.UserRepository) private readonly userRepository: IUserRepository) { }
 
     private preValidate(props: IFindUserProps) {
         if (!props.email && !props.id && !props.login) {
-            throw new BadRequestError('No search param passed')
+            throw new BadRequestError('NoParamsPassed', 'No search param passed')
         }
     }
 
-    async execute(props: IFindUserProps): Promise<User> {
+    async execute(props: IFindUserProps): Promise<User | null> {
         this.preValidate(props)
 
         const user = await this.userRepository.findOne({ email: props.email, id: props.id, login: props.login })
 
 
-        if (!user) {
+        if (!user && props.throwError) {
             throw new ResourceNotFound('UserNotFound', 'User was not found')
         }
 

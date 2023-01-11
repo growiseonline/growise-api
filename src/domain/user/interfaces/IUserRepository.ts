@@ -6,6 +6,7 @@ export interface IFindUserProps {
     login?: string
     email?: string
     id?: string
+    throwError?: boolean
 }
 
 export interface IUserRepository {
