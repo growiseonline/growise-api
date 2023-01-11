@@ -1,7 +1,6 @@
 import { generateRandomString, generateUUID } from "../../../infrastructure/crosscutting/utils";
 import { IUser } from "../interfaces/IUser";
 
-
 export interface ICreateUserProps {
     displayName: string
     login: string
