@@ -14,9 +14,8 @@ const route: IHttpRoute = {
 
             const createUserPresentation = await context.get<IAction<ICreateUserProps, User>>(TYPES.CreateUserPresentation)
 
-            const user = await createUserPresentation.execute(request.body)
+            await createUserPresentation.execute(request.body)
 
-            return user
         },
 
     }

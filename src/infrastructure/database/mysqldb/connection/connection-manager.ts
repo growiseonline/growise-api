@@ -49,7 +49,11 @@ export class ConnectionManager {
   }
 
   async conect(): Promise<void> {
-    await this.connection.initialize();
+    await new Promise((resolve, reject) => {
+      this.connection.initialize()
+        .then(() => resolve(undefined))
+
+    })
   }
 
   get isconected() {

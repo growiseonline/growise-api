@@ -2,7 +2,7 @@ import 'reflect-metadata'
 import { EntitySchema } from "typeorm";
 import { User } from "../../../../../domain/user/entity/user.entity";
 
-export const UserSchema = new EntitySchema({
+export const UserSchema = new EntitySchema<User>({
     name: User.DATABSE_NAME,
     tableName: User.DATABSE_NAME,
     columns: {

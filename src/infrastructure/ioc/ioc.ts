@@ -5,6 +5,7 @@ import { DataSource } from 'typeorm';
 import { GetTennantDataAction, IGetTennantDataProps, IGetTennantDataResponse } from "../../app/tennant";
 import { ISyncronizeDatabaseResponse, ISyncronizeTennantProps, SyncronizeTennant } from "../../app/tennant/syncronize-tennat-database";
 import { CreateUserAction } from "../../app/user/create-user.action";
+import { FindUserAction } from "../../app/user/find-user.action";
 import { IUserRepository } from "../../domain/user/interfaces/IUserRepository";
 import { GetTennantDataPresentation } from "../../presentation/tennant/get-tennant-data.presentation";
 import { CreateUserPresentation } from "../../presentation/user/create-user.presentation";
@@ -39,6 +40,7 @@ export async function handleTennantIoc(sqlConnection: any, apiHttpServer: any) {
     container.bind<IAction<IGetTennantDataProps, IGetTennantDataResponse>>(TYPES.GetTennantDataAction).to(GetTennantDataAction)
     container.bind<IAction<ISyncronizeTennantProps, ISyncronizeDatabaseResponse>>(TYPES.SyncronizeTennant).to(SyncronizeTennant)
     container.bind(TYPES.CreateUserAction).to(CreateUserAction)
+    container.bind(TYPES.FindUserAction).to(FindUserAction)
 
 
     // presentation  

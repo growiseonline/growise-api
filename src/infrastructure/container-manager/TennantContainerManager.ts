@@ -79,7 +79,7 @@ export class TennantContainerManager {
             slug,
         })
 
-        connection.conect()
+        await connection.conect()
 
         return connection
     }
